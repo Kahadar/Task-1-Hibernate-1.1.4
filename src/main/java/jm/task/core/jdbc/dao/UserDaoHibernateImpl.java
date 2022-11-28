@@ -5,7 +5,7 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+//import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,32 +56,14 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-                Transaction transaction = null;
-
+        User user = new User(name, lastName, age);
         try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.createSQLQuery("INSERT INTO  usrs_db (name, lastName, age) VALUES ('" + name + "', '" + lastName + "', " + age + ")").executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            session.beginTransaction();
+            session.save(user);
+            session.getTransaction().commit();
+        }catch (Exception e) {
             e.printStackTrace();
         }
-//        User user = new User(name, lastName, age);
-//
-//        Transaction transaction = null;
-//
-//        try (Session session = sessionFactory.openSession()) {
-//            transaction = session.beginTransaction();
-//            session.save(user);
-//            transaction.commit();
-//        } catch (Exception e) {
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//            e.printStackTrace();
-//        }
     }
 
     @Override
@@ -115,7 +97,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.createSQLQuery("TRUNCATE TABLE usrs_db").executeUpdate();
+            session.createQuery("DELETE User").executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
