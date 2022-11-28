@@ -57,8 +57,7 @@ public class Util {
 
                 settings.put(Environment.SHOW_SQL, "true");
 
-                settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-
+//                settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 //                settings.put(Environment.HBM2DDL_AUTO, "create-drop");
 
                 configuration.setProperties(settings);

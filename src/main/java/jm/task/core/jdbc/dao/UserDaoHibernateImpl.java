@@ -60,8 +60,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("INSERT INTO  usrs_db (name, lastName, age) " +
-                    "VALUES ('" + name + "', '" + lastName + "', " + age + ")").executeUpdate();
+            session.createSQLQuery("INSERT INTO  usrs_db (name, lastName, age) VALUES ('" + name + "', '" + lastName + "', " + age + ")").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -99,40 +98,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-//        Transaction transaction = null;
-//
-//        try (Session session = sessionFactory.openSession()) {
-//            transaction = session.beginTransaction();
-//            List <User> allUsers = session.createSQLQuery("SELECT * FROM usrs_db").getResultList();
-//            session.getTransaction().commit();
-//
-//           return allUsers;
-//
-//        }catch (Exception e) {
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//            e.printStackTrace();
-//        }
-//        SessionFactory sessionFactory = new Configuration().setProperties(Util.getProperties()).addAnnotatedClass(User.class).buildSessionFactory();
-
+       List <User> all = new ArrayList<>();
         try (Session session = sessionFactory.openSession()){
             Transaction transaction = null;
             transaction = session.beginTransaction();
-            List <User> all = session.createSQLQuery("SELECT * FROM usrs_db").getResultList();
+            all = session.createQuery("FROM User").getResultList();
             session.getTransaction().commit();
-            return all;
+
         }catch (Exception e) {
-//            session.getTransaction().rollback();
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
             e.printStackTrace();
-
-            throw new RuntimeException(e);
-
-
         }
+        return all;
     }
     @Override
     public void cleanUsersTable() {
